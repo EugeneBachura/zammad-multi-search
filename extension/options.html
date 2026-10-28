@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search Tabs for Zammad</title>
+  <link rel="stylesheet" href="options.css">
+  <script src="options.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><img src="icons/icon-48.png" width="48" height="48" alt=""><h1>Search Tabs for Zammad</h1></header>
+    <section>
+      <h2 data-message="startTitle">Get started</h2>
+      <p data-message="startBody">Sign in to your Zammad classic workspace and open this extension's toolbar panel. Choose Allow access and enable, then approve your browser's site access request. Search tabs will start automatically. If access is already allowed, choose Enable on this site.</p>
+      <p data-message="editing">The global search opens another tab. The search field in the results area and the filter builder edit the current tab.</p>
+      <p data-message="tabControls">Hover over a search tab and click the pencil to name it. Leave the name empty to show the query again. Drag tabs to reorder them, or focus a tab and press Alt + Up or Alt + Down.</p>
+    </section>
+    <section>
+      <h2 data-message="privateTitle">Private windows</h2>
+      <p id="private-status"></p>
+      <p data-message="privateSetup">Open the extension's details in your browser and turn on Allow in incognito. Then sign in to Zammad in a private window and enable the extension there.</p>
+      <p data-message="privateData">By default, private queries, tab names and tab order are kept in memory, separately from regular windows, and removed when the last private window closes. Enable the site again for each new private session.</p>
+      <label class="setting-choice"><input id="share-private-searches" type="checkbox"><span data-message="sharePrivate">Use shared saved searches in private windows</span></label>
+      <p data-message="sharePrivateHelp">When enabled, private windows use the regular profile's searches for the same Zammad address and account. Changes remain after private windows close. Turning this off does not remove data already saved in the regular profile. Temporary searches remain separate until the private session ends.</p>
+      <p id="private-sharing-status" role="status" aria-live="polite"></p>
+    </section>
+    <section>
+      <h2 data-message="sitesTitle">Enabled sites</h2>
+      <ul id="sites"></ul>
+      <p id="saved-count"></p>
+    </section>
+    <section>
+      <h2 data-message="privacyTitle">Your data</h2>
+      <p data-message="privacyBody">Search text is saved locally in this browser profile, grouped by the Zammad address and account ID. Queries can contain personal or confidential information. The extension also reads your locale and the state, priority and group labels needed by the filter builder.</p>
+      <p data-message="localOnly">The extension sends no data to the developer or third parties. It has no analytics, advertising, cloud sync or remote code.</p>
+      <button id="clear-data" type="button" data-message="clear">Disable all sites and remove saved searches</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <p><a href="privacy.html" data-message="privacyLink">Privacy policy</a></p>
+    </section>
+    <footer data-message="independent">Independent extension. Not affiliated with or endorsed by Zammad GmbH or the Zammad Foundation.</footer>
+  </main>
+</body>
+</html>

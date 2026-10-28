@@ -1,0 +1,11 @@
+node_modules/
+.tools/
+test-results/
+zammad/
+tmp/
+dist/
+.env
+.env.*
+*.pem
+*.key
+*.crx

@@ -1,0 +1,7 @@
+Search Tabs for Zammad 1.0.2
+
+- Give search tabs custom names with the pencil button. Names stay when their queries change.
+- Drag search tabs into position beside searches and tickets. Names and positions are restored after reload.
+- Restored tabs keep their search icon after page reload and sign-in, including when Zammad loads its icons later.
+- Use private windows after allowing access in the browser's extension settings.
+- Keep private searches separate and temporary by default, or choose shared saved searches in Settings. Shared searches stay in the regular browser profile after private windows close.

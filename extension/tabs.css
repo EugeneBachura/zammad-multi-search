@@ -1,0 +1,87 @@
+.tasks-navigation .zms-native-hidden {
+  display: none !important;
+}
+
+.tasks-navigation .zms-tab:focus-within .nav-tab-close {
+  visibility: visible;
+}
+
+.tasks-navigation .zms-tab:focus-visible,
+.tasks-navigation .zms-rename:focus-visible,
+.tasks-navigation .zms-close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}
+
+.tasks-navigation .zms-tab {
+  touch-action: none;
+  user-select: none;
+}
+
+.tasks-navigation .zms-actions {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline-end: var(--zms-actions-inset, 16px);
+}
+
+.tasks-navigation .zms-actions .nav-tab-close {
+  position: static;
+  inline-size: var(--zms-action-size, 19px);
+  padding: 0;
+  flex: none;
+}
+
+.tasks-navigation .zms-actions .nav-tab-close-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tasks-navigation .zms-rename svg {
+  display: block;
+  margin: 0;
+  flex: none;
+  inline-size: 12px;
+  block-size: 12px;
+  fill: currentColor;
+}
+
+.tasks-navigation .zms-tab:hover .nav-tab-name,
+.tasks-navigation .zms-tab:focus-within .nav-tab-name {
+  padding-inline-end: calc(var(--zms-action-size, 19px) * 2 + 8px + var(--zms-actions-inset, 16px));
+}
+
+.tasks-navigation .zms-tab.zms-renaming .zms-rename {
+  visibility: hidden;
+}
+
+.tasks-navigation .zms-name-editor {
+  inline-size: 100%;
+  block-size: 28px;
+  padding: 2px 6px;
+  font: inherit;
+  user-select: text;
+  touch-action: auto;
+}
+
+.tasks-navigation .zms-dragging {
+  position: fixed;
+  z-index: 10000;
+  opacity: 0.6;
+  cursor: grabbing;
+  pointer-events: none;
+}
+
+.tasks-navigation .zms-tab.zms-dragging:focus-visible {
+  outline: none;
+}
+
+.tasks-navigation .zms-placeholder {
+  outline: 1px dashed currentColor;
+  outline-offset: -3px;
+  opacity: 0.35;
+}

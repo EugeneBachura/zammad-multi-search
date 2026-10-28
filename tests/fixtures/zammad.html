@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zammad Multi Search — test interface</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px system-ui, sans-serif; color: #26303c; background: #f4f5f7; }
+    .header { display: flex; align-items: center; gap: 18px; padding: 14px 28px; color: white; background: #253447; }
+    .header strong { font-size: 20px; }
+    .header span { margin-left: 18px; color: #c4d0df; }
+    .global-search { display: flex; align-items: center; gap: 8px; width: 380px; margin-left: auto; }
+    .global-search-input { min-width: 0; }
+    :root { --menu-text: #bcc6d2; --text-inverted: white; --menu-background-active: #3479aa; --menu-close-tab-background: #4d596b; }
+    .tasks-navigation { position: absolute; top: 64px; bottom: 0; width: 260px; overflow-y: auto; color: var(--menu-text); background: #293344; }
+    .nav-tab { position: relative; display: flex; align-items: center; height: 40px; padding: 10px 15px 9px 0; color: var(--menu-text); text-decoration: none; border-bottom: 1px solid #ffffff0d; }
+    .nav-tab.is-active { color: white; background: var(--menu-background-active); }
+    .nav-tab:hover:not(.is-active) { background: #354154; }
+    .nav-tab-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nav-tab-close { position: absolute; right: 0; top: 0; display: flex; align-items: center; justify-content: center; height: 100%; padding-right: 16px; visibility: hidden; }
+    .nav-tab:hover .nav-tab-close { visibility: visible; }
+    .nav-tab-close-inner { display: flex; align-items: center; justify-content: center; width: 19px; height: 19px; background: var(--menu-close-tab-background); border-radius: 50%; }
+    .nav-tab-icon { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 30px; }
+    .nav-tab-icon .icon { width: 18px; height: 18px; fill: currentColor; }
+    .nav-tab-close svg { width: 9px; height: 9px; fill: var(--text-inverted); }
+    main { margin: 36px 36px 36px 296px; padding: 30px; background: white; border: 1px solid #dce0e5; border-radius: 6px; }
+    h1 { margin: 0 0 22px; font-size: 25px; }
+    .search-holder { display: flex; align-items: center; gap: 12px; }
+    input { width: 100%; padding: 12px; border: 1px solid #aeb7c1; border-radius: 4px; font: inherit; }
+    .search-holder button, .examples button { padding: 10px 16px; border: 1px solid #bcc5d0; border-radius: 4px; background: #f5f7fa; cursor: pointer; }
+    .examples { display: flex; gap: 10px; margin: 18px 0 30px; }
+    .notice { padding: 14px; color: #586577; background: #edf2f7; }
+    table { width: 100%; margin-top: 24px; border-collapse: collapse; text-align: left; }
+    th, td { padding: 14px 10px; border-bottom: 1px solid #e0e4e9; }
+    th { color: #697483; font-weight: 500; }
+    #ticket-view { display: none; }
+    .muted { color: #697483; }
+    :root { --text-normal: #555754; --text-muted: #9da0a4; --background-secondary: white; --background-tertiary: #2e303c; --background-active: #2e303c; --button-background: white; --button-background-active: #fafafa; --button-active: #424c52; --button-action-color: #999; --button-primary-text: white; --button-primary-background: #42a4d7; --border: #d5d9dc; --danger-color: #c34d4d; --highlight: #42a4d7; }
+    .hide { display: none; }
+    .text-muted, .help-block { color: var(--text-muted); }
+    .icon { width: 16px; height: 16px; fill: currentColor; }
+    .btn { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 10px 24px 9px; color: var(--text-normal); background: var(--button-background); font: inherit; font-size: 14px; text-align: center; text-decoration: none; white-space: nowrap; cursor: pointer; }
+    .btn span { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .btn .icon { flex-shrink: 0; vertical-align: middle; }
+    .btn:disabled { pointer-events: none; opacity: 0.33; }
+    .btn--action { display: inline-flex; align-items: center; height: 31px; padding: 0 11px !important; color: var(--button-action-color); font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .btn--primary { color: var(--button-primary-text); background: var(--button-primary-background); }
+    .btn--active { color: var(--text-inverted); background: var(--button-active); }
+    .btn--small { padding-top: 5px; padding-bottom: 4px; }
+    .btn--slim { padding-left: 12px; padding-right: 12px; }
+    .btn--text { display: inline-flex; align-items: center; margin: -10px; border: 0; padding: 10px; color: var(--button-primary-background); background: none; font-size: inherit; text-align: start; }
+    .btn--text.btn--subtle { color: var(--text-muted); text-decoration: underline; }
+    .btn--text.no-padding { margin: 0; padding: 0; }
+    .btn-group { display: inline-flex; flex-wrap: wrap; }
+    .btn-group .btn:not(:first-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+    .btn-group .btn:not(:last-child) { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 0; }
+    .form-control { display: block; width: 100%; height: 41px; border: 1px solid var(--border); border-radius: 3px; padding: 7px 12px; color: var(--text-normal); background: var(--background-secondary); font: inherit; line-height: 25px; }
+    select.form-control { appearance: none; padding-right: 34px; }
+    .controls--select { position: relative; }
+    .form-control + .icon-arrow-down { position: absolute; right: 12px; top: 50%; margin-top: -3px; width: 13px; height: 7px; pointer-events: none; }
+    .dropdown-menu { position: absolute; top: 100%; left: 0; display: none; z-index: 600; min-width: 100%; margin: 0; padding: 0; list-style: none; border: 0; border-radius: 0; color: var(--text-inverted); background: var(--background-tertiary); }
+    .dropdown li { height: 39px; padding: 0 15px; line-height: 39px; white-space: nowrap; cursor: pointer; }
+    .dropdown li:hover, .dropdown li.is-active { background: var(--highlight); }
+    .dropdown-menu > li[disabled] { opacity: 0.33; cursor: default; }
+    .dropdown-menu > li[disabled]:hover { background: none; }
+    textarea.form-control { height: auto; }
+    .modal-dialog { position: relative; width: auto; max-width: 660px; margin: 35px auto; }
+    .modal-content { position: relative; border: 1px solid var(--border); border-radius: 0; color: var(--text-normal); background: var(--background-secondary); }
+    .modal-header { padding: 30px 23px 23px; border: 0; }
+    .modal-header h1 { margin: 0; text-align: center; }
+    .modal-close { position: absolute; right: 0; top: 0; padding: 23px; color: var(--text-muted); cursor: pointer; }
+    .modal-body { position: relative; padding: 0 23px; clear: both; }
+    .modal-footer { display: flex; padding: 23px 23px 20px; border: 0; }
+    .modal-leftFooter, .modal-rightFooter { display: flex; flex: 1; align-items: center; }
+    .modal-rightFooter { justify-content: flex-end; }
+    .label { padding: 2px 5px; font-size: 12px; }
+    .label-info { color: var(--text-normal); background: var(--button-background-active); }
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <symbol id="icon-searchdetail" viewBox="0 0 24 24"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></symbol>
+    <symbol id="icon-diagonal-cross" viewBox="0 0 12 12"><path d="m1.4 0 4.6 4.6L10.6 0 12 1.4 7.4 6 12 10.6 10.6 12 6 7.4 1.4 12 0 10.6 4.6 6 0 1.4z"/></symbol>
+    <symbol id="icon-arrow-down" viewBox="0 0 13 7"><path d="M0 0h13L6.5 7z"/></symbol>
+  </svg>
+  <header class="header"><strong>Zammad Multi Search</strong><span>Test interfejsu klasycznego</span>
+    <form class="global-search"><input class="global-search-input form-control" aria-label="New global search" placeholder="Nowe wyszukiwanie" type="search" autocomplete="off"><button type="submit" class="btn btn--action">Szukaj</button></form>
+  </header>
+  <div hidden id="native-controls">
+    <button class="btn btn--action" data-reference="action">Action</button><button class="btn btn--primary" data-reference="primary">Submit</button>
+    <textarea class="form-control" data-reference="control"></textarea><div class="modal-content" data-reference="content"></div>
+    <ul class="dropdown-menu" data-reference="dropdown"></ul>
+  </div>
+  <div class="tasks tasks-navigation ui-sortable">
+    <a href="#ticket/zoom/1109" title="Przykładowe zgłoszenie" class="nav-tab task js-item js-locationVerify" data-key="Ticket-1109">
+      <span class="nav-tab-icon">○</span><span class="nav-tab-name u-textTruncate flex">Przykładowe zgłoszenie</span>
+    </a>
+    <a href="#search" title="Extended Search" class="nav-tab task js-item js-locationVerify is-active" data-key="Search">
+      <div class="nav-tab-icon"><svg class="icon icon-searchdetail"><use xlink:href="#icon-searchdetail"></use></svg></div>
+      <div class="nav-tab-name u-textTruncate flex">Extended Search</div>
+      <div class="nav-tab-close js-close" title="zamknij"><div class="nav-tab-close-inner"><svg class="icon icon-diagonal-cross"><use xlink:href="#icon-diagonal-cross"></use></svg></div></div>
+    </a>
+  </div>
+  <main>
+    <div id="search-view" class="detail-search">
+      <h1>Wyszukiwanie</h1>
+      <div class="detail-search-header"><form class="search-holder searchfield">
+        <input class="js-search form-control" name="query" placeholder="Szukaj w Zammad" aria-label="Search query" type="search" autocomplete="off">
+        <button type="submit" class="btn btn--action js-nativeSearch">Szukaj</button>
+      </form></div>
+      <div class="examples">
+        <button class="js-shortcut" data-query="state.name:open">Otwarte zgłoszenia</button>
+        <button class="js-shortcut" data-query="Knovel">Knovel</button>
+        <button class="js-shortcut" data-query="drukarka">Drukarki</button>
+      </div>
+      <p class="notice">To jest lokalny test paska zadań, bez serwera Zammad. Wyszukiwanie w nagłówku otwiera nową zakładkę. Pole poniżej i filtry zmieniają bieżące wyszukiwanie.</p>
+      <h2 id="results-title">Wyniki</h2>
+      <table><thead><tr><th>Numer</th><th>Tytuł</th><th>Status</th></tr></thead><tbody id="results"></tbody></table>
+    </div>
+    <div id="ticket-view"><h1>Przykładowe zgłoszenie</h1><p>Zakładki wyszukiwania pozostają na pasku po otwarciu zgłoszenia.</p></div>
+  </main>
+  <script>
+    let userId = "7";
+    let searchState = { query: "" };
+    let searchExists = true;
+    let navigatedQuery;
+    let renderCount = 0;
+    const nativeSearchMarkup = document.querySelector('[data-key="Search"]').outerHTML;
+    window.App = {
+      Session: { get: key => key === "id" ? userId : key === "preferences" ? { locale: "pl" } : undefined },
+      TaskManager: {
+        get: key => key === "Search" && searchExists ? { state: searchState } : undefined,
+        update: (key, params) => { if (key === "Search") { searchState = params.state; searchExists = true; } return params; },
+        remove: key => { if (key === "Search") { searchExists = false; searchState = { query: "" }; document.querySelector('[data-key="Search"]')?.remove(); } }
+      },
+      TicketState: { all: () => [{ name: "new" }, { name: "open" }, { name: "closed" }, { name: "needs triage" }] },
+      TicketPriority: { all: () => [{ name: "1 low" }, { name: "2 normal" }, { name: "3 high" }, { name: "4 urgent" }] },
+      Group: { all: () => [{ name: "IT Helpdesk" }, { name: "Biblioteka" }, { name: "CUI" }, { name: "CUI - Serwis" }] },
+      view: name => {
+        if (name === "generic/select") return () => '<div class="controls controls--select"><select class="form-control"></select><svg class="icon icon-arrow-down" data-native-select-icon="true"><use xlink:href="#icon-arrow-down"></use></svg></div>';
+        if (name !== "modal") throw new Error("Unknown view");
+        return () => `<div class="modal-dialog" data-native-modal-template="true"><div class="modal-content">
+          <div class="modal-header"><div class="modal-close js-close"><svg class="icon icon-diagonal-cross"><use xlink:href="#icon-diagonal-cross"></use></svg></div><h1 class="modal-title">Search</h1></div>
+          <div class="modal-body"></div><div class="modal-footer">
+            <div class="modal-leftFooter"><a class="btn btn--text btn--subtle js-cancel" href="#">Cancel</a></div>
+            <div class="modal-rightFooter"><button type="submit" class="btn btn--primary js-submit align-right">Search</button></div>
+          </div></div></div>`;
+      },
+      i18n: { translateInline: value => ({ new: "Nowe", open: "Otwarte", closed: "Zamknięte", "needs triage": "Do weryfikacji", "1 low": "Niski", "2 normal": "Normalny", "3 high": "Wysoki", "4 urgent": "Pilny" })[value] || value }
+    };
+
+    function renderRoute() {
+      const isSearch = /^#search(?:\/|$)/.test(location.hash);
+      if (isSearch && !document.querySelector('[data-key="Search"]')) {
+        document.querySelector(".tasks-navigation").insertAdjacentHTML("beforeend", nativeSearchMarkup);
+        searchExists = true;
+      }
+      const nativeSearch = document.querySelector('[data-key="Search"]');
+      document.querySelector("#search-view").style.display = isSearch ? "block" : "none";
+      document.querySelector("#ticket-view").style.display = isSearch ? "none" : "block";
+      nativeSearch?.classList.toggle("is-active", isSearch);
+
+      if (!isSearch) return;
+      const query = location.hash.startsWith("#search/") ? decodeURIComponent(location.hash.slice(8)) : searchState.query;
+      const ownNavigation = query === navigatedQuery;
+      if (!ownNavigation) {
+        navigatedQuery = undefined;
+        searchState.query = query;
+      }
+      App.TaskManager.update("Search", { state: searchState });
+      if (!ownNavigation) document.querySelector(".js-search").value = searchState.query;
+
+      if (nativeSearch) {
+        nativeSearch.title = searchState.query || "Extended Search";
+        nativeSearch.querySelector(".nav-tab-name").textContent = nativeSearch.title;
+      }
+
+      document.querySelector("#results-title").textContent = `Wyniki: ${searchState.query}`;
+      const results = document.querySelector("#results");
+      results.replaceChildren();
+      for (let index = 1; index <= 3; index++) {
+        const row = results.insertRow();
+        row.insertCell().textContent = `20261027000${index}`;
+        row.insertCell().textContent = `${searchState.query} — zgłoszenie ${index}`;
+        row.insertCell().textContent = "otwarte";
+      }
+      renderCount++;
+    }
+
+    document.querySelector("form.search-holder").addEventListener("submit", event => {
+      event.preventDefault();
+      location.hash = `#search/${encodeURIComponent(document.querySelector(".js-search").value.trim())}`;
+    });
+    document.querySelector(".global-search").addEventListener("submit", event => {
+      event.preventDefault();
+      location.hash = `#search/${encodeURIComponent(document.querySelector(".global-search-input").value.trim())}`;
+    });
+    document.querySelector(".js-search").addEventListener("keyup", event => {
+      if (event.key === "Escape") return;
+      searchState.query = event.target.value.trim();
+      App.TaskManager.update("Search", { state: searchState });
+      navigatedQuery = searchState.query;
+      location.hash = `#search/${encodeURIComponent(searchState.query)}`;
+    });
+    document.addEventListener("click", event => {
+      if (event.target.closest('[data-key="Search"] .js-close')) {
+        event.preventDefault();
+        App.TaskManager.remove("Search");
+        location.hash = "#ticket/zoom/1109";
+      }
+    });
+    document.querySelectorAll("[data-query]").forEach(button => button.addEventListener("click", () => {
+      location.hash = `#search/${encodeURIComponent(button.dataset.query)}`;
+    }));
+    window.addEventListener("hashchange", renderRoute);
+    if (!location.hash) location.hash = "#search";
+    renderRoute();
+  </script>
+</body>
+</html>

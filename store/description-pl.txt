@@ -1,0 +1,31 @@
+Search Tabs for Zammad to rozszerzenie przeglądarki dla klasycznego interfejsu komputerowego Zammad, systemu obsługi zgłoszeń i pomocy technicznej. Zachowuje wiele zapytań wyszukiwania jako zakładki wewnątrz Zammad.
+
+Rozpocznij nowe wyszukiwanie z globalnego pola Zammad, a poprzednie zapytanie pozostanie dostępne. Kliknij zakładkę, aby wrócić do zapytania na tej samej stronie, bez otwierania kolejnych kart przeglądarki.
+
+Funkcje
+• Nowe wyszukiwania globalne automatycznie tworzą osobne zakładki.
+• Edytuj bieżącą zakładkę z pola wyników lub kreatora filtrów.
+• Przełączaj wyszukiwania i zgłoszenia bez otwierania kolejnej karty przeglądarki.
+• Przywracaj zapisane zapytania po odświeżeniu strony.
+• Nadawaj zakładkom nazwy przyciskiem z ołówkiem i przeciągaj je, aby zmieniać kolejność obok zgłoszeń.
+• Używaj okien prywatnych z osobnymi tymczasowymi wyszukiwaniami albo wybierz wspólne zapisane wyszukiwania w ustawieniach.
+• Łącz warunki dotyczące stanu, priorytetu, grupy, dat i innych pól.
+• Twórz niezależne grupy AND/OR, wykluczaj je przez NOT i wybieraj zakresy dat lub liczb.
+• Korzystaj z polskich lub angielskich elementów zgodnych z motywem Zammad.
+
+Pierwsze kroki
+Zaloguj się do klasycznego interfejsu Zammad, otwórz panel rozszerzenia i wybierz Zezwól na dostęp i włącz. Zatwierdź prośbę przeglądarki; zakładki włączą się automatycznie. Dostęp jest wymagany tylko dla wybranej witryny.
+
+Prywatność
+Zapytania są przechowywane lokalnie w profilu przeglądarki i wykonywane na istniejącym serwerze Zammad. Nie są wysyłane do autora. Rozszerzenie nie zawiera reklam, analityki ani synchronizacji w chmurze. W ustawieniach można wyłączyć rozszerzenie i usunąć zapisane wyszukiwania.
+
+Okna prywatne wymagają zezwolenia w ustawieniach rozszerzenia w przeglądarce i włączenia witryny dla każdej prywatnej sesji. Domyślnie ich wyszukiwania są tymczasowe i znikają po zamknięciu ostatniego prywatnego okna. Po włączeniu wspólnych wyszukiwań w ustawieniach zapytania, nazwy i kolejność zakładek używają zwykłego profilu dla tego samego adresu i konta Zammad, a dane pozostają po zamknięciu okien prywatnych.
+
+Zgodność
+Wymaga istniejącego konta Zammad i klasycznego interfejsu komputerowego. Po otwarciu zakładki serwer Zammad pobiera aktualne wyniki. Rozszerzenie zapisuje tekst zapytania; nie zachowuje strony wyników, sortowania ani zaznaczonych zgłoszeń. Interfejs mobilny nie jest obsługiwany.
+
+Zrzuty ekranu przedstawiają rozszerzenie w środowisku demonstracyjnym z przykładowymi danymi.
+
+Niezależne rozszerzenie autorstwa Eugene Bachura. Nie jest powiązane z Zammad GmbH ani Zammad Foundation i nie jest przez nie zatwierdzone. Zammad jest znakiem towarowym odpowiedniego właściciela.
+
+Kontakt: eugene.bachura@gmail.com

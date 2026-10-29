@@ -1,4 +1,4 @@
-Search Tabs for Zammad is a browser extension for the classic desktop interface of Zammad, the help desk and ticketing system. It keeps multiple search queries available as tabs inside Zammad.
+Search Tabs for Zammad is a browser extension for the desktop interface of Zammad, the help desk and ticketing system. It keeps multiple search queries available as tabs inside Zammad.
 
 Start a new search from Zammad's global search field and the previous query stays available. Click a search tab to return to its query on the same page, without opening additional browser tabs.
 
@@ -14,7 +14,7 @@ Features
 • Use English or Polish controls that follow the Zammad theme.
 
 Getting started
-Sign in to your Zammad classic workspace, open the extension's toolbar panel and choose Allow access and enable. Approve your browser's site access request; search tabs will start automatically. Access is requested only for the site you choose.
+Sign in to your Zammad workspace, open the extension's toolbar panel and choose Allow access and enable. Approve your browser's site access request; search tabs will start automatically. Access is requested only for the site you choose.
 
 Privacy
 Queries are saved locally in your browser profile and run on your existing Zammad server. They are not sent to the developer. There are no ads, analytics or cloud synchronization. Settings let you disable the extension and remove saved searches.
@@ -22,7 +22,7 @@ Queries are saved locally in your browser profile and run on your existing Zamma
 Private windows require permission in your browser's extension settings and site activation for each private session. By default their searches are temporary and removed after the last private window closes. If you enable shared saved searches in Settings, queries, names and tab order use the regular profile for the same Zammad address and account, and remain after private windows close.
 
 Compatibility
-Requires an existing Zammad account and the classic desktop interface. Search results are refreshed by your Zammad server when a tab is opened. The extension saves query text; it does not preserve result pages, sorting or ticket selections. The mobile interface is not supported.
+Requires an existing Zammad account and the desktop interface. Search results are refreshed by your Zammad server when a tab is opened. The extension saves query text; it does not preserve result pages, sorting or ticket selections. The mobile interface is not supported.
 
 The screenshots show the extension running in a demonstration workspace with sample data.
 

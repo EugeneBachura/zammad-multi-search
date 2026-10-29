@@ -2,7 +2,7 @@
   "name": "search-tabs-for-zammad",
   "version": "1.0.2",
   "private": true,
-  "description": "Automatic search tabs for Zammad's classic interface",
+  "description": "Automatic search tabs for Zammad",
   "scripts": {
     "test": "node --test --test-concurrency=1 tests/extension.test.cjs tests/private.test.cjs tests/search-builder.test.cjs tests/build.test.cjs",
     "test:firefox": "node --test tests/firefox.test.cjs",

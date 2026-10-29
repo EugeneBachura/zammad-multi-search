@@ -1,5 +1,5 @@
 {
   "extensionName": { "message": "Search Tabs for Zammad" },
-  "extensionDescription": { "message": "Wiele wyszukiwań jako zakładki w klasycznym Zammad. Przełączaj wyniki na jednej stronie i buduj filtry wizualnie." },
+  "extensionDescription": { "message": "Wiele wyszukiwań jako zakładki w Zammad. Przełączaj wyniki na jednej stronie i buduj filtry wizualnie." },
   "actionTitle": { "message": "Włącz Search Tabs for Zammad na tej stronie" }
 }

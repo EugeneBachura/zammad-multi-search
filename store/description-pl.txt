@@ -1,4 +1,4 @@
-Search Tabs for Zammad to rozszerzenie przeglądarki dla klasycznego interfejsu komputerowego Zammad, systemu obsługi zgłoszeń i pomocy technicznej. Zachowuje wiele zapytań wyszukiwania jako zakładki wewnątrz Zammad.
+Search Tabs for Zammad to rozszerzenie przeglądarki dla interfejsu komputerowego Zammad, systemu obsługi zgłoszeń i pomocy technicznej. Zachowuje wiele zapytań wyszukiwania jako zakładki wewnątrz Zammad.
 
 Rozpocznij nowe wyszukiwanie z globalnego pola Zammad, a poprzednie zapytanie pozostanie dostępne. Kliknij zakładkę, aby wrócić do zapytania na tej samej stronie, bez otwierania kolejnych kart przeglądarki.
 
@@ -14,7 +14,7 @@ Funkcje
 • Korzystaj z polskich lub angielskich elementów zgodnych z motywem Zammad.
 
 Pierwsze kroki
-Zaloguj się do klasycznego interfejsu Zammad, otwórz panel rozszerzenia i wybierz Zezwól na dostęp i włącz. Zatwierdź prośbę przeglądarki; zakładki włączą się automatycznie. Dostęp jest wymagany tylko dla wybranej witryny.
+Zaloguj się do Zammad, otwórz panel rozszerzenia i wybierz Zezwól na dostęp i włącz. Zatwierdź prośbę przeglądarki; zakładki włączą się automatycznie. Dostęp jest wymagany tylko dla wybranej witryny.
 
 Prywatność
 Zapytania są przechowywane lokalnie w profilu przeglądarki i wykonywane na istniejącym serwerze Zammad. Nie są wysyłane do autora. Rozszerzenie nie zawiera reklam, analityki ani synchronizacji w chmurze. W ustawieniach można wyłączyć rozszerzenie i usunąć zapisane wyszukiwania.
@@ -22,7 +22,7 @@ Zapytania są przechowywane lokalnie w profilu przeglądarki i wykonywane na ist
 Okna prywatne wymagają zezwolenia w ustawieniach rozszerzenia w przeglądarce i włączenia witryny dla każdej prywatnej sesji. Domyślnie ich wyszukiwania są tymczasowe i znikają po zamknięciu ostatniego prywatnego okna. Po włączeniu wspólnych wyszukiwań w ustawieniach zapytania, nazwy i kolejność zakładek używają zwykłego profilu dla tego samego adresu i konta Zammad, a dane pozostają po zamknięciu okien prywatnych.
 
 Zgodność
-Wymaga istniejącego konta Zammad i klasycznego interfejsu komputerowego. Po otwarciu zakładki serwer Zammad pobiera aktualne wyniki. Rozszerzenie zapisuje tekst zapytania; nie zachowuje strony wyników, sortowania ani zaznaczonych zgłoszeń. Interfejs mobilny nie jest obsługiwany.
+Wymaga istniejącego konta Zammad i interfejsu komputerowego. Po otwarciu zakładki serwer Zammad pobiera aktualne wyniki. Rozszerzenie zapisuje tekst zapytania; nie zachowuje strony wyników, sortowania ani zaznaczonych zgłoszeń. Interfejs mobilny nie jest obsługiwany.
 
 Zrzuty ekranu przedstawiają rozszerzenie w środowisku demonstracyjnym z przykładowymi danymi.
 

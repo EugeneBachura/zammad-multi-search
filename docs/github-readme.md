@@ -1,6 +1,6 @@
 # Search Tabs for Zammad
 
-Keep multiple searches open as tabs inside Zammad's classic desktop interface. Switch between queries on the same page and build search filters visually.
+Keep multiple searches open as tabs inside Zammad's desktop interface. Switch between queries on the same page and build search filters visually.
 
 Source version: **{{version}}**. Author: **Eugene Bachura**.
 
@@ -16,17 +16,21 @@ Source version: **{{version}}**. Author: **Eugene Bachura**.
 - Use English or Polish controls that follow the Zammad theme.
 - Use separate temporary searches in private windows, or explicitly choose shared saved searches.
 
-## Install from source
+## Install
+
+Install [Search Tabs for Zammad from the Chrome Web Store](https://chromewebstore.google.com/detail/search-tabs-for-zammad/bcegemlpmaaooeehamladkiamhgelfjd).
+
+### Install from source
 
 1. Download this repository as a ZIP and extract it, or clone it with Git.
 2. Open `chrome://extensions` and enable Developer mode.
 3. Choose **Load unpacked** and select the repository's `extension` folder.
-4. Sign in to your Zammad classic workspace and open the extension's toolbar panel.
+4. Sign in to your Zammad workspace and open the extension's toolbar panel.
 5. Choose **Allow access and enable**, then approve access to that site. If access is already allowed, choose **Enable on this site**.
 
 The extension requests access only to the site you choose. Node.js and a build step are not required to run the unpacked extension.
 
-Requires Chrome 111 or later and an existing Zammad account with access to the classic desktop workspace. The mobile interface is not supported. Search results are refreshed by the Zammad server; the extension saves queries and does not preserve result pages, sorting or selected tickets.
+Requires Chrome 111 or later and an existing Zammad account with access to the desktop workspace. The mobile interface is not supported. Search results are refreshed by the Zammad server; the extension saves queries and does not preserve result pages, sorting or selected tickets.
 
 ## Search tabs
 

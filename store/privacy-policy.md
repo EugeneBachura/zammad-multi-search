@@ -4,7 +4,7 @@
 
 Effective date: 28 October 2026. Publisher: Eugene Bachura. Contact: [eugene.bachura@gmail.com](mailto:eugene.bachura@gmail.com).
 
-This independent browser extension keeps multiple search queries as tabs in the classic Zammad interface and helps users compose search filters.
+This independent browser extension keeps multiple search queries as tabs in the Zammad interface and helps users compose search filters.
 
 ## Information handled
 

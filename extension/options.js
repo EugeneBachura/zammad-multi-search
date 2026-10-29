@@ -1,7 +1,7 @@
 const extensionApi = globalThis.browser || globalThis.chrome;
 const translations = {
   en: {
-    startTitle: "Get started", startBody: "Sign in to your Zammad classic workspace and open this extension's toolbar panel. Choose Allow access and enable, then approve your browser's site access request. Search tabs will start automatically. If access is already allowed, choose Enable on this site.",
+    startTitle: "Get started", startBody: "Sign in to your Zammad workspace and open this extension's toolbar panel. Choose Allow access and enable, then approve your browser's site access request. Search tabs will start automatically. If access is already allowed, choose Enable on this site.",
     editing: "The global search opens another tab. The search field in the results area and the filter builder edit the current tab.",
     tabControls: "Hover over a search tab and click the pencil to name it. Leave the name empty to show the query again. Drag tabs to reorder them, or focus a tab and press Alt + Up or Alt + Down.",
     privateTitle: "Private windows", privateAllowed: "Browser permission for private windows is allowed.", privateBlocked: "Browser permission for private windows is not allowed yet.",
@@ -19,7 +19,7 @@ const translations = {
     privacyLink: "Privacy policy", independent: "Independent extension. Not affiliated with or endorsed by Zammad GmbH or the Zammad Foundation."
   },
   pl: {
-    startTitle: "Pierwsze kroki", startBody: "Zaloguj się do klasycznego interfejsu Zammad i otwórz panel rozszerzenia. Wybierz Zezwól na dostęp i włącz, a następnie zatwierdź prośbę przeglądarki. Zakładki włączą się automatycznie. Jeśli dostęp jest już udzielony, wybierz Włącz w tej witrynie.",
+    startTitle: "Pierwsze kroki", startBody: "Zaloguj się do Zammad i otwórz panel rozszerzenia. Wybierz Zezwól na dostęp i włącz, a następnie zatwierdź prośbę przeglądarki. Zakładki włączą się automatycznie. Jeśli dostęp jest już udzielony, wybierz Włącz w tej witrynie.",
     editing: "Wyszukiwanie globalne otwiera kolejną zakładkę. Pole w obszarze wyników i kreator filtrów zmieniają bieżącą zakładkę.",
     tabControls: "Najedź na zakładkę wyszukiwania i kliknij ołówek, aby nadać jej nazwę. Pusta nazwa przywraca tekst zapytania. Przeciągaj zakładki, aby zmienić kolejność, albo ustaw fokus na zakładce i naciśnij Alt + strzałka w górę lub w dół.",
     privateTitle: "Okna prywatne", privateAllowed: "Przeglądarka zezwala na działanie w oknach prywatnych.", privateBlocked: "Przeglądarka jeszcze nie zezwala na działanie w oknach prywatnych.",

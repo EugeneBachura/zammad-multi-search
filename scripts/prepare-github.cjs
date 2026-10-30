@@ -9,7 +9,7 @@ const destination = path.join(distribution, "github-source");
 const version = JSON.parse(fs.readFileSync(path.join(project, "package.json"), "utf8")).version;
 const rootFiles = [".gitattributes", ".gitignore", "LICENSE", "package.json", "package-lock.json"];
 const scripts = ["build.cjs", "check-release.cjs", "demo.cjs", "export-icons.ps1", "package.ps1", "prepare-github.cjs", "store-assets.cjs", "sync-privacy.cjs"];
-const tests = ["build.test.cjs", "extension.test.cjs", "firefox.test.cjs", "private.test.cjs", "search-builder.test.cjs", "fixtures/zammad.html", "helpers/firefox.cjs"];
+const tests = ["build.test.cjs", "extension.test.cjs", "firefox.test.cjs", "lifecycle.test.cjs", "private.test.cjs", "search-builder.test.cjs", "fixtures/zammad.html", "helpers/firefox.cjs"];
 const storeFiles = ["description-en.txt", "description-pl.txt", "privacy-policy.md", `release-notes-${version}.txt`];
 
 function filesUnder(directory) {

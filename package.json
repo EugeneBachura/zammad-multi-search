@@ -1,10 +1,10 @@
 {
   "name": "search-tabs-for-zammad",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "description": "Automatic search tabs for Zammad",
   "scripts": {
-    "test": "node --test --test-concurrency=1 tests/extension.test.cjs tests/private.test.cjs tests/search-builder.test.cjs tests/build.test.cjs",
+    "test": "node --test --test-concurrency=1 tests/extension.test.cjs tests/lifecycle.test.cjs tests/private.test.cjs tests/search-builder.test.cjs tests/build.test.cjs",
     "test:firefox": "node --test tests/firefox.test.cjs",
     "demo": "node scripts/demo.cjs",
     "check:release": "node scripts/check-release.cjs",

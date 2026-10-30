@@ -1,0 +1,5 @@
+Search Tabs for Zammad 1.0.4
+
+- Restore the page integration and toolbar badge when the browser starts or the extension is re-enabled on an existing Zammad page.
+- Verify that search tabs are running before showing ON or reporting success in the toolbar panel.
+- Recover a missing page connection when the toolbar panel opens, and show an error if activation cannot finish.

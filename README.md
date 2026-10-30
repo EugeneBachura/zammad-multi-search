@@ -2,7 +2,7 @@
 
 Keep multiple searches open as tabs inside Zammad's desktop interface. Switch between queries on the same page and build search filters visually.
 
-Source version: **1.0.3**. Author: **Eugene Bachura**.
+Source version: **1.0.4**. Author: **Eugene Bachura**.
 
 ![Search tabs in a demonstration workspace](store/images/screenshot-en-tabs.png)
 
@@ -40,6 +40,8 @@ Hover over a search tab and click the pencil to name it. Enter saves, Escape can
 
 Drag a search tab to change its position. A focused tab can also be moved with Alt + Up or Alt + Down.
 
+The integration is restored when the browser starts or the extension is re-enabled. The green ON badge and the toolbar's ready message confirm that the page integration is responding. Opening the toolbar can repair a missing connection. If activation fails, the panel shows an error and asks you to reload Zammad.
+
 ## Private windows
 
 Turn on **Allow in incognito** in the browser's extension details, then sign in to Zammad and enable the site in the private window.
@@ -72,7 +74,7 @@ On Windows with PowerShell, create the store ZIP with:
 npm run package:chrome
 ```
 
-The command writes `dist/search-tabs-for-zammad-1.0.3-chrome.zip` and its SHA-256 checksum. The ZIP contains only the files from `extension`, with `manifest.json` at its root.
+The command writes `dist/search-tabs-for-zammad-1.0.4-chrome.zip` and its SHA-256 checksum. The ZIP contains only the files from `extension`, with `manifest.json` at its root.
 
 For a local demonstration:
 

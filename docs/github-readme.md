@@ -40,6 +40,8 @@ Hover over a search tab and click the pencil to name it. Enter saves, Escape can
 
 Drag a search tab to change its position. A focused tab can also be moved with Alt + Up or Alt + Down.
 
+The integration is restored when the browser starts or the extension is re-enabled. The green ON badge and the toolbar's ready message confirm that the page integration is responding. Opening the toolbar can repair a missing connection. If activation fails, the panel shows an error and asks you to reload Zammad.
+
 ## Private windows
 
 Turn on **Allow in incognito** in the browser's extension details, then sign in to Zammad and enable the site in the private window.

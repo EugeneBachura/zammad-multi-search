@@ -20,6 +20,7 @@ const translations = {
     unknown: "Could not check this page. Reload Zammad, then open this panel again.",
     unavailable: "Open a Zammad website and sign in to its desktop interface.",
     enabledSignIn: "Enabled for this site. Sign in to Zammad to use your search tabs.",
+    integrationError: "Could not start search tabs on this page. Reload Zammad and try again.",
     denied: "Site access was not granted. Click Allow access and enable to try again.", success: "Search tabs are ready. You can close this panel.", error: "Could not enable search tabs. Reload Zammad and try again."
   },
   pl: {
@@ -38,6 +39,7 @@ const translations = {
     unknown: "Nie udało się sprawdzić strony. Odśwież Zammad i ponownie otwórz ten panel.",
     unavailable: "Otwórz witrynę Zammad i zaloguj się do interfejsu komputerowego.",
     enabledSignIn: "Włączono dla tej witryny. Zaloguj się do Zammad, aby korzystać z zakładek wyszukiwania.",
+    integrationError: "Nie udało się uruchomić zakładek na tej stronie. Odśwież Zammad i spróbuj ponownie.",
     denied: "Nie udzielono dostępu do witryny. Kliknij Zezwól na dostęp i włącz, aby spróbować ponownie.", success: "Zakładki wyszukiwania są gotowe. Możesz zamknąć ten panel.", error: "Nie udało się włączyć zakładek. Odśwież Zammad i spróbuj ponownie."
   }
 };

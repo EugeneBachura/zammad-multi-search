@@ -48,6 +48,8 @@
   let renderPending = false;
   let stopped = false;
   let stopping;
+  let receivedStates = 0;
+  let reportedReady;
   const closedWhileLoading = new Set();
 
   const searchBuilder = globalThis.ZammadSearchBuilder.create({
@@ -232,6 +234,7 @@
       return;
     }
 
+    receivedStates++;
     currentState = state && typeof state.userId === "string" && typeof state.query === "string" ? state : null;
     const nextKey = currentState ? `searches:${location.origin}${location.pathname}:${currentState.userId}` : "";
 
@@ -507,11 +510,20 @@
     return tab;
   }
 
+  function reportReady(active) {
+    if (reportedReady === active) return;
+    reportedReady = active;
+    try { extensionApi.runtime.sendMessage({ type: "search-tabs:ready", active }).catch(() => {}); } catch {}
+  }
+
   function render() {
     if (stopped) return;
     searchBuilder.render(currentState);
     const navigation = document.querySelector(".tasks.tasks-navigation");
-    if (!navigation || !currentState) return removeControls();
+    if (!navigation || !currentState) {
+      reportReady(false);
+      return removeControls();
+    }
     if (drag?.started || navigation.querySelector(".ui-sortable-helper")) return;
     if (nameEditor && !nameEditor.input.isConnected) finishRename(false);
 
@@ -573,6 +585,7 @@
       openSearches = order;
       saveChanges();
     }
+    reportReady(true);
   }
 
   function closeSearch(query) {
@@ -713,6 +726,20 @@
 
   function onMessage(message, sender, respond) {
     if (sender.id !== extensionApi.runtime.id) return;
+    if (message?.type === "search-tabs:ping") {
+      const before = receivedStates;
+      try {
+        requestState();
+        render();
+        const active = !stopped && receivedStates !== before && reportedReady === true;
+        if (!active) reportReady(false);
+        respond({ active });
+      } catch {
+        reportReady(false);
+        respond({ active: false });
+      }
+      return;
+    }
     if (message?.type === "search-tabs:private-changed" && temporaryMode) {
       onStorageChanged(message.changes, "private");
       respond({ ok: true });

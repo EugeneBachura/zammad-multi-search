@@ -8,6 +8,7 @@ const styleFiles = ["tabs.css", "search-builder.css"];
 const activationLifetime = 5 * 60 * 1000;
 let pendingChange = Promise.resolve();
 let pendingPrivateChange = Promise.resolve();
+const pageStarts = new Map();
 
 function changeSites(action) {
   const result = pendingChange.then(() => action());
@@ -73,7 +74,11 @@ async function siteStatus(tabId, origin) {
   const tab = await targetTab(tabId, origin);
   const hasAccess = await extensionApi.permissions.contains({ origins: [sitePattern(origin)] });
   const privateMode = Boolean(tab.incognito);
-  return { enabled: hasAccess && (await enabledSites(privateMode)).includes(origin), hasAccess, pageState: await inspectPage(tabId), privateMode, sharedSearches: privateMode && await readState("sharePrivateSearches") === true };
+  const enabled = hasAccess && (await enabledSites(privateMode)).includes(origin);
+  const state = await inspectPage(tabId);
+  const active = enabled && await startPage(tab).catch(() => false);
+  await updateBadge(tabId, active);
+  return { enabled, hasAccess, pageState: enabled && state === "ready" && !active ? "integrationError" : state, privateMode, sharedSearches: privateMode && await readState("sharePrivateSearches") === true };
 }
 
 async function setPrivateSharing(enabled) {
@@ -155,6 +160,48 @@ async function updateBadge(tabId, enabled) {
   await Promise.allSettled(updates);
 }
 
+async function integrationIsReady(tabId) {
+  try {
+    const result = await extensionApi.tabs.sendMessage(tabId, { type: "search-tabs:ping" }, { frameId: 0 });
+    return result?.active === true;
+  } catch {
+    return false;
+  }
+}
+
+function startPage(tab) {
+  if (pageStarts.has(tab.id)) return pageStarts.get(tab.id);
+  const starting = (async () => {
+    if (await integrationIsReady(tab.id)) return true;
+    await extensionApi.tabs.sendMessage(tab.id, { type: "search-tabs:stop" }, { frameId: 0 }).catch(() => {});
+    await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, world: "MAIN", func: () => {
+      document.dispatchEvent(new Event("zammad-multi-search:stop"));
+    } });
+    await extensionApi.scripting.insertCSS({ target: { tabId: tab.id }, files: styleFiles });
+    await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: ["bridge.js"], world: "MAIN" });
+    await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: contentFiles });
+    for (let attempt = 0; attempt < 5; attempt++) {
+      if (await integrationIsReady(tab.id)) return true;
+      await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    return false;
+  })().finally(() => pageStarts.delete(tab.id));
+  pageStarts.set(tab.id, starting);
+  return starting;
+}
+
+async function refreshPage(tab) {
+  const origin = /^https?:\/\//.test(tab.url || "") ? new URL(tab.url).origin : "";
+  const enabled = Boolean(origin) && await siteIsEnabled(origin, Boolean(tab.incognito));
+  const active = enabled && await startPage(tab).catch(() => false);
+  await updateBadge(tab.id, active);
+}
+
+async function restorePages() {
+  const tabs = await extensionApi.tabs.query({ active: true });
+  await Promise.allSettled(tabs.map(refreshPage));
+}
+
 async function enableSite(tab) {
   const origin = new URL(tab.url).origin;
   const privateMode = Boolean(tab.incognito);
@@ -170,10 +217,9 @@ async function enableSite(tab) {
   const existing = scripts.filter(script => registered.some(item => item.id === script.id));
   if (existing.length) await extensionApi.scripting.updateContentScripts(existing);
 
-  await extensionApi.scripting.insertCSS({ target: { tabId: tab.id }, files: styleFiles });
-  await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: ["bridge.js"], world: "MAIN" });
-  await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: contentFiles });
-  await updateBadge(tab.id, true);
+  const active = await startPage(tab);
+  await updateBadge(tab.id, active);
+  if (!active) throw new Error("Search tabs did not start on this page.");
 }
 
 async function stopTabs(origins, privateMode) {
@@ -272,6 +318,11 @@ async function privateData(message, sender) {
 
 extensionApi.runtime.onMessage.addListener((message, sender, respond) => {
   if (sender.id !== extensionApi.runtime.id) return;
+  if (message?.type === "search-tabs:ready" && sender.tab && sender.frameId === 0) {
+    const origin = new URL(sender.url).origin;
+    siteIsEnabled(origin, Boolean(sender.tab.incognito)).then(enabled => updateBadge(sender.tab.id, enabled && message.active === true)).then(() => respond({ ok: true }));
+    return true;
+  }
   if (message?.type === "search-tabs:stopped" && sender.tab) {
     updateBadge(sender.tab.id, false).then(() => respond({ ok: true }));
     return true;
@@ -280,7 +331,7 @@ extensionApi.runtime.onMessage.addListener((message, sender, respond) => {
     const origin = new URL(sender.url).origin;
     const privateMode = Boolean(sender.tab.incognito);
     Promise.all([siteIsEnabled(origin, privateMode), readState("sharePrivateSearches")]).then(async ([enabled, shared]) => {
-      await updateBadge(sender.tab.id, enabled);
+      if (!enabled) await updateBadge(sender.tab.id, false);
       respond({ enabled, privateMode, sharedSearches: privateMode && shared === true });
     }, () => respond({ enabled: false, privateMode }));
     return true;
@@ -355,17 +406,15 @@ async function reconcileSites(migrate = false) {
   await stopTabs(privateSites.filter(site => !privateAllowed.includes(site)), true);
 }
 
-extensionApi.runtime.onInstalled.addListener(() => { changeSites(async () => { await closePrivateSession(); await reconcileSites(true); await resumeActivations(); }).catch(console.error); });
-extensionApi.runtime.onStartup.addListener(() => { changeSites(async () => { await closePrivateSession(); await reconcileSites(); await resumeActivations(); }).catch(console.error); });
+extensionApi.runtime.onInstalled.addListener(() => { changeSites(async () => { await closePrivateSession(); await reconcileSites(true); await resumeActivations(); await restorePages(); }).catch(console.error); });
+extensionApi.runtime.onStartup.addListener(() => { changeSites(async () => { await closePrivateSession(); await reconcileSites(); await resumeActivations(); await restorePages(); }).catch(console.error); });
 extensionApi.tabs.onUpdated.addListener((tabId, change, tab) => {
-  if (change.status !== "loading") return;
-  const origin = /^https?:\/\//.test(tab.url || "") ? new URL(tab.url).origin : "";
-  if (!origin) {
-    updateBadge(tabId, false);
-    return;
-  }
-  siteIsEnabled(origin, Boolean(tab.incognito)).then(enabled => updateBadge(tabId, enabled), () => updateBadge(tabId, false));
+  if (change.status === "complete") refreshPage(tab).catch(console.error);
+});
+extensionApi.tabs.onActivated.addListener(({ tabId }) => {
+  extensionApi.tabs.get(tabId).then(refreshPage).catch(() => {});
 });
 extensionApi.windows.onRemoved.addListener(() => { changeSites(closePrivateSession).catch(console.error); });
 extensionApi.permissions.onAdded.addListener(() => { changeSites(resumeActivations).catch(console.error); });
 extensionApi.permissions.onRemoved.addListener(() => { changeSites(reconcileSites).catch(console.error); });
+restorePages().catch(console.error);

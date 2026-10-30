@@ -1,4 +1,6 @@
 Search Tabs for Zammad 1.0.3
 
-- Restore the green ON toolbar badge when an enabled Zammad page reloads or opens in a new browser tab.
-- Clear the badge when navigating away or disabling the integration. Regular and private windows keep their own site activation state.
+- Restore the page integration and toolbar badge when the browser starts, an enabled Zammad page reloads or the extension is re-enabled on an existing page.
+- Verify that search tabs are running before showing ON or reporting success in the toolbar panel.
+- Recover a missing page connection when the toolbar panel opens, and show an error if activation cannot finish.
+- Clear the badge when navigating away, signing out or disabling the integration. Regular and private windows keep their own site activation state.

@@ -2,7 +2,7 @@
 
 Keep multiple searches open as tabs inside Zammad's desktop interface. Switch between queries on the same page and build search filters visually.
 
-Source version: **1.0.2**. Author: **Eugene Bachura**.
+Source version: **1.0.3**. Author: **Eugene Bachura**.
 
 ![Search tabs in a demonstration workspace](store/images/screenshot-en-tabs.png)
 
@@ -72,7 +72,7 @@ On Windows with PowerShell, create the store ZIP with:
 npm run package:chrome
 ```
 
-The command writes `dist/search-tabs-for-zammad-1.0.2-chrome.zip` and its SHA-256 checksum. The ZIP contains only the files from `extension`, with `manifest.json` at its root.
+The command writes `dist/search-tabs-for-zammad-1.0.3-chrome.zip` and its SHA-256 checksum. The ZIP contains only the files from `extension`, with `manifest.json` at its root.
 
 For a local demonstration:
 

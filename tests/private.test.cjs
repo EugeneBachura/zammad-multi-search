@@ -104,7 +104,7 @@ test("private search storage in Chrome", { timeout: 90000 }, async t => {
           input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
         } else if (action === "account") userId = value;
         return {
-          ready: typeof App !== "undefined", builder: Boolean(document.querySelector(".zms-builder-launch")),
+          ready: typeof App !== "undefined", builder: Boolean(document.querySelector(".zms-builder-launch")), documentStarted: performance.timeOrigin,
           tabs: [...document.querySelectorAll(".zms-tab")].map(tab => ({ query: tab.dataset.zmsQuery, name: tab.querySelector(".nav-tab-name").textContent }))
         };
       } });
@@ -123,9 +123,11 @@ test("private search storage in Chrome", { timeout: 90000 }, async t => {
 
   await t.test("temporary private queries and names stay out of persistent storage", async () => {
     await openPrivate();
+    assert.equal(await background(tabId => chrome.action.getBadgeText({ tabId }), privateTab), "");
     otherPrivateWindow = await background(() => chrome.windows.create({ incognito: true, url: "about:blank" }));
     assert.equal((await privatePage("state")).builder, false);
     await enablePrivate();
+    assert.equal(await background(tabId => chrome.action.getBadgeText({ tabId }), privateTab), "ON");
     await privatePage("search", "private secret");
     await waitUntil(async () => (await privatePage("state")).tabs.length === 1);
     await privatePage("rename", { query: "private secret", name: "Private name" });
@@ -133,8 +135,13 @@ test("private search storage in Chrome", { timeout: 90000 }, async t => {
     await waitUntil(async () => (await stored("session"))[`private:${metadata}`]?.names["private secret"] === "Private name");
     assert.deepEqual((await stored("local"))[key], ["regular only"]);
     assert.equal(JSON.stringify(await stored("local")).includes("private secret"), false);
+    const beforeReload = await privatePage("state");
     await background(tabId => chrome.tabs.reload(tabId), privateTab);
-    await waitUntil(async () => (await privatePage("state")).tabs.some(tab => tab.name === "Private name"));
+    await waitUntil(async () => {
+      const state = await privatePage("state");
+      return state.documentStarted !== beforeReload.documentStarted && state.tabs.some(tab => tab.name === "Private name");
+    });
+    assert.equal(await background(tabId => chrome.action.getBadgeText({ tabId }), privateTab), "ON");
     assert.equal((await privatePage("state")).tabs.some(tab => tab.query === "regular only"), false);
     const rejected = await background(async ({ origin, key }) => {
       const tab = (await chrome.tabs.query({})).find(tab => !tab.incognito && tab.url?.startsWith(origin));
@@ -172,6 +179,8 @@ test("private search storage in Chrome", { timeout: 90000 }, async t => {
     assert.deepEqual(await send({ type: "search-tabs:disable", tabId, origin }), { ok: true, accessRemoved: true });
     await waitUntil(async () => await regular.locator(".zms-builder-launch").count() === 0);
     assert.equal((await privatePage("state")).builder, true);
+    assert.equal(await background(tabId => chrome.action.getBadgeText({ tabId }), privateTab), "ON");
+    assert.equal(await background(tabId => chrome.action.getBadgeText({ tabId }), tabId), "");
     assert.equal(await background(async () => (await chrome.scripting.getRegisteredContentScripts()).every(script => script.persistAcrossSessions === false)), true);
     assert.deepEqual(await send({ type: "search-tabs:enable", tabId, origin }), { ok: true });
     await waitUntil(async () => await regular.locator(".zms-builder-launch").count() === 1);
@@ -188,6 +197,7 @@ test("private search storage in Chrome", { timeout: 90000 }, async t => {
     assert.equal(await regular.locator(".zms-builder-launch").count(), 1);
     await openPrivate();
     assert.equal((await privatePage("state")).builder, false);
+    assert.equal(await background(tabId => chrome.action.getBadgeText({ tabId }), privateTab), "");
     await enablePrivate();
     await waitUntil(async () => (await privatePage("state")).tabs.some(tab => tab.name === "Shared name"));
   });

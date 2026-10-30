@@ -1,0 +1,4 @@
+Search Tabs for Zammad 1.0.3
+
+- Restore the green ON toolbar badge when an enabled Zammad page reloads or opens in a new browser tab.
+- Clear the badge when navigating away or disabling the integration. Regular and private windows keep their own site activation state.

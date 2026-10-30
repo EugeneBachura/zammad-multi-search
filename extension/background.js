@@ -146,6 +146,15 @@ function siteScripts(origin, persistent = true) {
   ];
 }
 
+async function updateBadge(tabId, enabled) {
+  const updates = [
+    extensionApi.action.setBadgeText({ text: enabled ? "ON" : "", tabId }),
+    extensionApi.action.setTitle({ title: enabled ? "Search Tabs for Zammad is enabled on this site" : extensionApi.i18n.getMessage("actionTitle"), tabId })
+  ];
+  if (enabled) updates.push(extensionApi.action.setBadgeBackgroundColor({ color: "#276b47", tabId }));
+  await Promise.allSettled(updates);
+}
+
 async function enableSite(tab) {
   const origin = new URL(tab.url).origin;
   const privateMode = Boolean(tab.incognito);
@@ -164,9 +173,7 @@ async function enableSite(tab) {
   await extensionApi.scripting.insertCSS({ target: { tabId: tab.id }, files: styleFiles });
   await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: ["bridge.js"], world: "MAIN" });
   await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: contentFiles });
-  await extensionApi.action.setBadgeBackgroundColor({ color: "#276b47", tabId: tab.id });
-  await extensionApi.action.setBadgeText({ text: "ON", tabId: tab.id });
-  await extensionApi.action.setTitle({ title: "Search Tabs for Zammad is enabled on this site", tabId: tab.id });
+  await updateBadge(tab.id, true);
 }
 
 async function stopTabs(origins, privateMode) {
@@ -175,8 +182,7 @@ async function stopTabs(origins, privateMode) {
   await Promise.allSettled(tabs.filter(tab => tab.id && (privateMode === undefined || Boolean(tab.incognito) === privateMode)).map(async tab => {
     const result = await extensionApi.tabs.sendMessage(tab.id, { type: "search-tabs:stop", origins });
     if (!result?.ok) return;
-    await extensionApi.action.setBadgeText({ text: "", tabId: tab.id });
-    await extensionApi.action.setTitle({ title: extensionApi.i18n.getMessage("actionTitle"), tabId: tab.id });
+    await updateBadge(tab.id, false);
     await extensionApi.scripting.removeCSS({ target: { tabId: tab.id }, files: styleFiles }).catch(() => {});
   }));
 }
@@ -267,16 +273,16 @@ async function privateData(message, sender) {
 extensionApi.runtime.onMessage.addListener((message, sender, respond) => {
   if (sender.id !== extensionApi.runtime.id) return;
   if (message?.type === "search-tabs:stopped" && sender.tab) {
-    Promise.allSettled([
-      extensionApi.action.setBadgeText({ text: "", tabId: sender.tab.id }),
-      extensionApi.action.setTitle({ title: extensionApi.i18n.getMessage("actionTitle"), tabId: sender.tab.id })
-    ]).then(() => respond({ ok: true }));
+    updateBadge(sender.tab.id, false).then(() => respond({ ok: true }));
     return true;
   }
   if (message?.type === "search-tabs:status" && sender.tab) {
     const origin = new URL(sender.url).origin;
     const privateMode = Boolean(sender.tab.incognito);
-    Promise.all([siteIsEnabled(origin, privateMode), readState("sharePrivateSearches")]).then(([enabled, shared]) => respond({ enabled, privateMode, sharedSearches: privateMode && shared === true }), () => respond({ enabled: false, privateMode }));
+    Promise.all([siteIsEnabled(origin, privateMode), readState("sharePrivateSearches")]).then(async ([enabled, shared]) => {
+      await updateBadge(sender.tab.id, enabled);
+      respond({ enabled, privateMode, sharedSearches: privateMode && shared === true });
+    }, () => respond({ enabled: false, privateMode }));
     return true;
   }
   if (message?.type === "search-tabs:private-data" && sender.tab) {
@@ -351,6 +357,15 @@ async function reconcileSites(migrate = false) {
 
 extensionApi.runtime.onInstalled.addListener(() => { changeSites(async () => { await closePrivateSession(); await reconcileSites(true); await resumeActivations(); }).catch(console.error); });
 extensionApi.runtime.onStartup.addListener(() => { changeSites(async () => { await closePrivateSession(); await reconcileSites(); await resumeActivations(); }).catch(console.error); });
+extensionApi.tabs.onUpdated.addListener((tabId, change, tab) => {
+  if (change.status !== "loading") return;
+  const origin = /^https?:\/\//.test(tab.url || "") ? new URL(tab.url).origin : "";
+  if (!origin) {
+    updateBadge(tabId, false);
+    return;
+  }
+  siteIsEnabled(origin, Boolean(tab.incognito)).then(enabled => updateBadge(tabId, enabled), () => updateBadge(tabId, false));
+});
 extensionApi.windows.onRemoved.addListener(() => { changeSites(closePrivateSession).catch(console.error); });
 extensionApi.permissions.onAdded.addListener(() => { changeSites(resumeActivations).catch(console.error); });
 extensionApi.permissions.onRemoved.addListener(() => { changeSites(reconcileSites).catch(console.error); });

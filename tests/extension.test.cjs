@@ -49,9 +49,10 @@ test("Zammad extension in Chrome", { timeout: 90000 }, async t => {
   });
   await page.goto(origin);
 
-  await worker.evaluate(async origin => {
+  const tabId = await worker.evaluate(async origin => {
     const [tab] = await chrome.tabs.query({ url: `${origin}/*` });
     await enableSite(tab);
+    return tab.id;
   }, origin);
 
   async function waitUntil(check) {
@@ -76,6 +77,32 @@ test("Zammad extension in Chrome", { timeout: 90000 }, async t => {
     await waitUntil(async () => await page.locator(".js-search").inputValue() === query);
   }
 
+  await t.test("toolbar badge follows enabled pages after reload, new tabs and navigation", async () => {
+    const badge = id => worker.evaluate(tabId => chrome.action.getBadgeText({ tabId }), id);
+    assert.equal(await badge(tabId), "ON");
+    const restored = await context.newPage();
+    try {
+      await restored.goto(origin);
+      await waitUntil(async () => await restored.locator(".zms-builder-launch").count() === 1);
+      const restoredId = await worker.evaluate(async ({ origin, tabId }) => {
+        return (await chrome.tabs.query({})).find(tab => tab.id !== tabId && tab.url?.startsWith(origin)).id;
+      }, { origin, tabId });
+      await waitUntil(async () => await badge(restoredId) === "ON");
+      assert.deepEqual(await worker.evaluate(tabId => chrome.action.getBadgeBackgroundColor({ tabId }), restoredId), [39, 107, 71, 255]);
+      await worker.evaluate(tabId => chrome.action.setBadgeText({ tabId, text: "" }), restoredId);
+      await restored.reload();
+      await waitUntil(async () => await restored.locator(".zms-builder-launch").count() === 1);
+      await waitUntil(async () => await badge(restoredId) === "ON");
+      await restored.goto("about:blank");
+      await waitUntil(async () => await badge(restoredId) === "");
+      await restored.goto(origin);
+      await waitUntil(async () => await restored.locator(".zms-builder-launch").count() === 1);
+      await waitUntil(async () => await badge(restoredId) === "ON");
+    } finally {
+      await restored.close();
+    }
+  });
+
   await t.test("new searches automatically stay open and switch on the same document", async () => {
     await search("state.name:open");
     await search("Knovel / zażółć + 50% #? & привет");
@@ -95,6 +122,7 @@ test("Zammad extension in Chrome", { timeout: 90000 }, async t => {
     await page.locator(".zms-tab").first().click({ button: "middle" });
     assert.equal(context.pages().length, 1);
     assert.equal(documentRequests.length, 1);
+    assert.equal(await worker.evaluate(tabId => chrome.action.getBadgeText({ tabId }), tabId), "ON");
   });
 
   await t.test("live input edits the active tab in place and a global search still opens another tab", async () => {
@@ -155,6 +183,7 @@ test("Zammad extension in Chrome", { timeout: 90000 }, async t => {
     assert.equal(await page.locator(".zms-save").count(), 0);
     await page.locator(".zms-tab").first().click();
     await waitUntil(async () => await page.locator(".js-search").inputValue() === "state.name:open");
+    assert.equal(await worker.evaluate(tabId => chrome.action.getBadgeText({ tabId }), tabId), "ON");
   });
 
   await t.test("closing the active tab activates a neighbouring search and stays closed after reload", async () => {
@@ -752,6 +781,7 @@ test("Zammad extension in Chrome", { timeout: 90000 }, async t => {
     assert.equal(await popup.locator("#enable").textContent(), await popup.evaluate(() => messages.disable));
     await popup.locator("#enable").click();
     await waitUntil(async () => await popup.locator("#enable").textContent() === await popup.evaluate(() => messages.enable));
+    assert.equal(await worker.evaluate(tabId => chrome.action.getBadgeText({ tabId }), tabId), "");
     assert.equal(await page.locator(".zms-tab, .zms-builder-launch").count(), 0);
     assert.equal(await worker.evaluate(async () => Object.keys(await chrome.storage.local.get(null)).some(key => key.startsWith("searches:"))), true);
     await page.reload();
@@ -903,6 +933,14 @@ test("Zammad extension in Chrome", { timeout: 90000 }, async t => {
         document.body.append(document.createElement("span"));
       } });
     }, origin);
+    await waitUntil(async () => worker.evaluate(async origin => {
+      const [tab] = await chrome.tabs.query({ url: `${origin}/*` });
+      const [result] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => {
+        if (!globalThis.pendingRenderFrame) document.body.append(document.createElement("span"));
+        return Boolean(globalThis.pendingRenderFrame);
+      } });
+      return result.result;
+    }, origin));
     await worker.evaluate(async () => {
       const contains = chrome.permissions.contains;
       chrome.permissions.contains = async () => false;

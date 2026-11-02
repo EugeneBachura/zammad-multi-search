@@ -11,6 +11,7 @@ Funkcje
 • Używaj okien prywatnych z osobnymi tymczasowymi wyszukiwaniami albo wybierz wspólne zapisane wyszukiwania w ustawieniach.
 • Łącz warunki dotyczące stanu, priorytetu, grupy, dat i innych pól.
 • Twórz niezależne grupy AND/OR, wykluczaj je przez NOT i wybieraj zakresy dat lub liczb.
+• Sortuj wyniki według kolejności pracy: nowe, otwarte, oczekujące, a następnie zamknięte i pozostałe stany. Kliknij ponownie nagłówek stanu, aby odwrócić kolejność grup.
 • Korzystaj z polskich lub angielskich elementów zgodnych z motywem Zammad.
 
 Pierwsze kroki
@@ -22,7 +23,7 @@ Zapytania są przechowywane lokalnie w profilu przeglądarki i wykonywane na ist
 Okna prywatne wymagają zezwolenia w ustawieniach rozszerzenia w przeglądarce i włączenia witryny dla każdej prywatnej sesji. Domyślnie ich wyszukiwania są tymczasowe i znikają po zamknięciu ostatniego prywatnego okna. Po włączeniu wspólnych wyszukiwań w ustawieniach zapytania, nazwy i kolejność zakładek używają zwykłego profilu dla tego samego adresu i konta Zammad, a dane pozostają po zamknięciu okien prywatnych.
 
 Zgodność
-Wymaga istniejącego konta Zammad i interfejsu komputerowego. Po otwarciu zakładki serwer Zammad pobiera aktualne wyniki. Rozszerzenie zapisuje tekst zapytania; nie zachowuje strony wyników, sortowania ani zaznaczonych zgłoszeń. Interfejs mobilny nie jest obsługiwany.
+Wymaga istniejącego konta Zammad i interfejsu komputerowego. Sortowanie stanów wymaga wyszukiwania zgłoszeń z podziałem na strony. W każdej grupie najpierw wyświetlane są ostatnio zaktualizowane zgłoszenia. Po otwarciu zakładki serwer Zammad pobiera aktualne wyniki. Rozszerzenie zapisuje tekst zapytania; nie zachowuje strony wyników, sortowania ani zaznaczonych zgłoszeń. Interfejs mobilny nie jest obsługiwany.
 
 Zrzuty ekranu przedstawiają rozszerzenie w środowisku demonstracyjnym z przykładowymi danymi.
 

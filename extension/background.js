@@ -4,6 +4,7 @@ function sitePattern(origin) {
   return `${address.protocol}//${address.hostname}/*`;
 }
 const contentFiles = ["search-builder.js", "content.js"];
+const bridgeFiles = ["state-sorter.js", "bridge.js"];
 const styleFiles = ["tabs.css", "search-builder.css"];
 const activationLifetime = 5 * 60 * 1000;
 let pendingChange = Promise.resolve();
@@ -146,7 +147,7 @@ function siteScripts(origin, persistent = true) {
   const settings = { matches: [sitePattern(origin)], runAt: "document_idle", persistAcrossSessions: persistent };
 
   return [
-    { ...settings, id: `site-${siteId}-bridge`, js: ["bridge.js"], world: "MAIN" },
+    { ...settings, id: `site-${siteId}-bridge`, js: bridgeFiles, world: "MAIN" },
     { ...settings, id: `site-${siteId}-tabs`, js: contentFiles, css: styleFiles }
   ];
 }
@@ -178,7 +179,7 @@ function startPage(tab) {
       document.dispatchEvent(new Event("zammad-multi-search:stop"));
     } });
     await extensionApi.scripting.insertCSS({ target: { tabId: tab.id }, files: styleFiles });
-    await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: ["bridge.js"], world: "MAIN" });
+    await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: bridgeFiles, world: "MAIN" });
     await extensionApi.scripting.executeScript({ target: { tabId: tab.id }, files: contentFiles });
     for (let attempt = 0; attempt < 5; attempt++) {
       if (await integrationIsReady(tab.id)) return true;

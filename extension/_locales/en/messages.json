@@ -1,5 +1,5 @@
 {
   "extensionName": { "message": "Search Tabs for Zammad" },
-  "extensionDescription": { "message": "Keep multiple searches as tabs in Zammad. Switch searches on one page and build filters visually." },
+  "extensionDescription": { "message": "Keep searches as tabs in Zammad. Build filters visually and sort ticket results by state." },
   "actionTitle": { "message": "Enable Search Tabs for Zammad on this site" }
 }

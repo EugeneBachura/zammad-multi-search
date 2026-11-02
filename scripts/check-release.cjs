@@ -12,7 +12,7 @@ const manifest = JSON.parse(fs.readFileSync(path.join(extensionDirectory, "manif
 const packageInfo = readJson("package.json");
 const lock = readJson("package-lock.json");
 const allowedFiles = new Set([
-  "manifest.json", "background.js", "bridge.js", "content.js", "search-builder.js", "tabs.css", "search-builder.css",
+  "manifest.json", "background.js", "bridge.js", "state-sorter.js", "content.js", "search-builder.js", "tabs.css", "search-builder.css",
   "options.html", "options.js", "options.css", "privacy.html", "NOTICE.txt", "popup.html", "popup.js",
   "_locales/en/messages.json", "_locales/pl/messages.json",
   ...[16, 32, 48, 128].map(size => `icons/icon-${size}.png`)

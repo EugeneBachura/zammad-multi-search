@@ -13,6 +13,7 @@ Source version: **1.0.3**. Author: **Eugene Bachura**.
 - Give search tabs custom names and drag them beside other searches or tickets.
 - Restore saved queries, names and tab positions after reloading the page.
 - Combine conditions with AND, OR, nested groups, NOT and date or number ranges.
+- Sort paginated ticket searches by workflow state, including results on subsequent pages.
 - Use English or Polish controls that follow the Zammad theme.
 - Use separate temporary searches in private windows, or explicitly choose shared saved searches.
 
@@ -39,6 +40,8 @@ The global search field opens another search tab. The field inside the results a
 Hover over a search tab and click the pencil to name it. Enter saves, Escape cancels, and an empty name restores the query label. A custom name stays when its query changes.
 
 Drag a search tab to change its position. A focused tab can also be moved with Alt + Up or Alt + Down.
+
+In the paginated ticket search, click the state column to sort new, open, pending, then closed and other states. Click again, or press Enter or Space on the header, to reverse the groups. Custom states follow their Zammad state type. Recently updated tickets come first within each group. Sorting uses the existing Zammad search functions to count groups and load only the slices needed for the selected page. The order is not saved when the query changes or the page reloads.
 
 The integration is restored when the browser starts or the extension is re-enabled. The green ON badge and the toolbar's ready message confirm that the page integration is responding. Opening the toolbar can repair a missing connection. If activation fails, the panel shows an error and asks you to reload Zammad.
 

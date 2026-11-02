@@ -2,13 +2,13 @@
 
 ## Search Tabs for Zammad
 
-Effective date: 28 October 2026. Publisher: Eugene Bachura. Contact: [eugene.bachura@gmail.com](mailto:eugene.bachura@gmail.com).
+Effective date: 2 November 2026. Publisher: Eugene Bachura. Contact: [eugene.bachura@gmail.com](mailto:eugene.bachura@gmail.com).
 
 This independent browser extension keeps multiple search queries as tabs in the Zammad interface and helps users compose search filters.
 
 ## Information handled
 
-On sites that you explicitly enable, the extension reads the current search query, Zammad account ID, interface language and state, priority and group labels needed by its filter builder. It also handles custom search-tab names you enter and task identifiers used to restore tab positions. Queries and tab names can contain names, email addresses, ticket references, or other personal and confidential information that you enter.
+On sites that you explicitly enable, the extension reads the current search query, Zammad account ID, interface language and state, priority and group labels needed by its filter builder. It also handles custom search-tab names you enter and task identifiers used to restore tab positions. Sorting uses ticket search-result metadata, state identifiers and types, and result counts. Queries, tab names and result metadata can contain names, email addresses, ticket references, or other personal and confidential information.
 
 The extension reads the existing page's task navigation and native dialog markup to display its controls. It does not read ticket conversations or attachments to build these controls. Search results continue to be provided by your Zammad installation.
 
@@ -17,6 +17,8 @@ The extension reads the existing page's task navigation and native dialog markup
 In regular windows, search text, custom tab names and tab positions are stored in the browser's local extension storage on your device. Entries are grouped by Zammad origin, application path and account ID so searches can be restored and separated between accounts. The list of sites enabled in regular windows and the preference for sharing private searches are also stored locally. Site access grants are managed by the browser. Filter choices and unfinished drafts are held in memory while the page is open.
 
 Pending activation requests can be stored locally with the site address, browser tab ID and request time so enabling can finish if the browser's permission prompt closes the toolbar panel. Requests older than five minutes are ignored. Pending requests are removed when handled or canceled, or when saved extension data is cleared.
+
+Sorting choices, result counts and result pages are held in memory on the open Zammad page. They are not added to the extension's saved searches or browser storage.
 
 Data is used only to provide search tabs and the filter builder. The extension's use of information complies with the Chrome Web Store User Data Policy, including its Limited Use requirements.
 
@@ -32,7 +34,7 @@ Sites enabled in private windows and their pending activation requests are alway
 
 The extension does not send data to the publisher or third parties. It has no analytics, advertising, tracking, remote code, cloud backup or browser storage synchronization. The publisher cannot access your saved queries.
 
-Running a search uses the Zammad page you already opened. That page communicates with your chosen Zammad server under its own privacy and security rules. The extension also reuses that page's native styles and icons. The extension does not create an additional destination for your queries.
+Running a search uses the Zammad page you already opened. That page communicates with your chosen Zammad server under its own privacy and security rules. Sorting requests counts for state groups and the result slices needed for the selected page through Zammad's existing search functions. The extension also reuses that page's native styles and icons. The extension does not create an additional destination for your queries.
 
 ## Retention and removal
 

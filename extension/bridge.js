@@ -5,6 +5,7 @@
   let originalUpdate;
   let observedManager;
   let active = true;
+  const stateSorter = window.ZammadStateSorter?.create();
 
   function collectionOptions(app, model) {
     try {
@@ -59,6 +60,7 @@
     try {
       const app = window.App;
       observeSearch(app);
+      try { stateSorter?.observe(app); } catch { stateSorter?.reset(); }
       const userId = app?.Session?.get("id");
 
       if (userId && app.TaskManager) {
@@ -93,6 +95,7 @@
 
   function stop() {
     active = false;
+    stateSorter?.destroy();
     if (observedManager && observedManager.update === observedUpdate) observedManager.update = originalUpdate;
     window.zammadMultiSearchBridge = false;
     document.removeEventListener("zammad-multi-search:request", onRequest);

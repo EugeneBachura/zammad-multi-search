@@ -85,3 +85,12 @@
   outline-offset: -3px;
   opacity: 0.35;
 }
+
+.zms-state-sort {
+  cursor: pointer;
+}
+
+.zms-state-sort:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}

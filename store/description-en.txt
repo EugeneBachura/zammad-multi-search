@@ -11,6 +11,7 @@ Features
 • Use private windows with separate temporary searches or choose shared saved searches in Settings.
 • Build combinations of conditions for status, priority, group, dates and more.
 • Combine independent AND/OR groups, exclude groups with NOT and choose date or number ranges.
+• Sort ticket search results in workflow order: new, open, pending, then closed and other states. Click the state column again to reverse the groups.
 • Use English or Polish controls that follow the Zammad theme.
 
 Getting started
@@ -22,7 +23,7 @@ Queries are saved locally in your browser profile and run on your existing Zamma
 Private windows require permission in your browser's extension settings and site activation for each private session. By default their searches are temporary and removed after the last private window closes. If you enable shared saved searches in Settings, queries, names and tab order use the regular profile for the same Zammad address and account, and remain after private windows close.
 
 Compatibility
-Requires an existing Zammad account and the desktop interface. Search results are refreshed by your Zammad server when a tab is opened. The extension saves query text; it does not preserve result pages, sorting or ticket selections. The mobile interface is not supported.
+Requires an existing Zammad account and the desktop interface. State sorting requires the paginated ticket search. Within each state group, recently updated tickets come first. Search results are refreshed by your Zammad server when a tab is opened. The extension saves query text; it does not preserve result pages, sorting or ticket selections. The mobile interface is not supported.
 
 The screenshots show the extension running in a demonstration workspace with sample data.
 

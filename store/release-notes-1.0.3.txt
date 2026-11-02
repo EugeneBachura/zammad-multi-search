@@ -1,5 +1,6 @@
 Search Tabs for Zammad 1.0.3
 
+- Sort paginated ticket searches by workflow state: new, open, pending, then closed and other states. Click the state header again to reverse the groups.
 - Restore the page integration and toolbar badge when the browser starts, an enabled Zammad page reloads or the extension is re-enabled on an existing page.
 - Verify that search tabs are running before showing ON or reporting success in the toolbar panel.
 - Recover a missing page connection when the toolbar panel opens, and show an error if activation cannot finish.

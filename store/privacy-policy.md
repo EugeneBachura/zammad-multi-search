@@ -20,7 +20,7 @@ Pending activation requests can be stored locally with the site address, browser
 
 Sorting choices, result counts and result pages are held in memory on the open Zammad page. They are not added to the extension's saved searches or browser storage.
 
-Data is used only to provide search tabs and the filter builder. The extension's use of information complies with the Chrome Web Store User Data Policy, including its Limited Use requirements.
+Data is used only to provide search tabs, the filter builder and search-result sorting. The extension's use of information complies with the Chrome Web Store User Data Policy, including its Limited Use requirements.
 
 ## Private windows
 
